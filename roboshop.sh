@@ -3,7 +3,7 @@
 amiid="ami-09c813fb71547fc4f"
 sgid="sg-05ceca7471f660a07"
 zoneid="Z0442981UILX0S96GDLC"
-domainname=narendra.fun.com
+domainname="narendra.fun"
 
 for instance in $@
 do
