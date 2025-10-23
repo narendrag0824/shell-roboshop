@@ -1,6 +1,6 @@
 #!/bin/bash
 
 
-scrpitdir=$pwd
+scrpitdir=$(pwd)
 
 echo "currunt dir is :: $scrpitdir"
