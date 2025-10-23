@@ -7,4 +7,4 @@ echo "currunt dir is :: $scrpitdir"
 
 mongodbhost="$(mongodb.narendra.fun)"
 
-echo id " hi:$mongodbhost"
+echo id "hi:$mongodbhost"
