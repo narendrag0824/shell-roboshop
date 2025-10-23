@@ -83,7 +83,7 @@ validate $? "copy mongo.repo"
 dnf install mongodb-mongosh -y &>>$logfile
 validate $? "install mongodb"
 
-mongosh --host $mongodbhost </app/db/master-data.js
+mongosh --host $mongodbhost </app/db/master-data.js &>>$logfile
 validate $? "load catalogue products"
 
 systemctl restart catalogue
