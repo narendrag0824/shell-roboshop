@@ -1,43 +1,41 @@
 #!/bin/bash
 
-amiid="ami-09c813fb71547fc4f"
-sgid="sg-05ceca7471f660a07"
-zoneid="Z0442981UILX0S96GDLC"
-domainname="narendra.fun"
+AMI_ID="ami-09c813fb71547fc4f"
+SG_ID="sg-05ceca7471f660a07" # replace with your SG ID
+ZONE_ID="Z0442981UILX0S96GDLC" # replace with your ID
+DOMAIN_NAME="narendra.fun"
 
-for instance in $@
+for instance in $@ # mongodb redis mysql
 do
-      instanceid=$(aws ec2 run-instances --image-id ami-09c813fb71547fc4f --instance-type t3.micro --security-group-ids sg-05ceca7471f660a07 --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$instance}]" --query 'Instances[0].InstanceId' --output text)
+    INSTANCE_ID=$(aws ec2 run-instances --image-id $AMI_ID --instance-type t3.micro --security-group-ids $SG_ID --tag-specifications "ResourceType=instance,Tags=[{Key=Name,Value=$instance}]" --query 'Instances[0].InstanceId' --output text)
 
-if [ $instance != "frontend" ]; then
-    ip=$(aws ec2 describe-instances --instance-ids $instanceid --query "Reservations[0].Instances[0].PrivateIpAddress" --output text)
-    recordname="$instance.$domainname"
+    # Get Private IP
+    if [ $instance != "frontend" ]; then
+        IP=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID --query 'Reservations[0].Instances[0].PrivateIpAddress' --output text)
+        RECORD_NAME="$instance.$DOMAIN_NAME" # mongodb.daws86s.fun
+    else
+        IP=$(aws ec2 describe-instances --instance-ids $INSTANCE_ID --query 'Reservations[0].Instances[0].PublicIpAddress' --output text)
+        RECORD_NAME="$DOMAIN_NAME" # daws86s.fun
+    fi
 
-else
-    ip=$(aws ec2 describe-instances --instance-ids $instanceid --query "Reservations[0].Instances[0].PublicIpAddress" --output text) 
-    recordname="$domainname"
-fi 
- echo "$instance=$ip"
-  aws route53 change-resource-record-sets \
-    --hosted-zone-id $zoneid \
+    echo "$instance: $IP"
+
+    aws route53 change-resource-record-sets \
+    --hosted-zone-id $ZONE_ID \
     --change-batch '
-	{
-  "Comment": "Update record set",
-  "Changes": [
     {
-      "Action": "UPSERT",
-      "ResourceRecordSet": {
-        "Name": "'$recordname'",
-        "Type": "A",
-        "TTL": 1,
-        "ResourceRecords": [
-          {
-            "Value": "'$ip'"
-          }
-        ]
-      }
+        "Comment": "Updating record set"
+        ,"Changes": [{
+        "Action"              : "UPSERT"
+        ,"ResourceRecordSet"  : {
+            "Name"              : "'$RECORD_NAME'"
+            ,"Type"             : "A"
+            ,"TTL"              : 1
+            ,"ResourceRecords"  : [{
+                "Value"         : "'$IP'"
+            }]
+        }
+        }]
     }
-  ]
-}
-'
+    '
 done
