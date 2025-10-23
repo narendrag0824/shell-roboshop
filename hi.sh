@@ -3,4 +3,4 @@
 
 scrpitdir=$pwd
 
-echo "print $scrpitdir"
+echo "currunt dir is :: $scrpitdir"
