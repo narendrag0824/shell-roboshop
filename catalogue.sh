@@ -10,7 +10,7 @@ n="\e[0m"
 logfolder="/var/log/shell-roboshop"
 scriptname=$( echo $0 | cut -d "." -f1 )
 logfile="$logfolder/$scriptname.log"
-mongodbhost="$mangodb.narendra.fun"
+mongodbhost="$mongodb.narendra.fun"
 script_dir="$(pwd)"
 
 mkdir -p $logfolder
@@ -71,10 +71,10 @@ validate $? "copy systm service to catalogue user"
 systemctl daemon-reload
 validate $? "deamon reload"
 
-systemctl enable catalogue 
+systemctl enable catalogue &>>$logfile 
 validate $? "enable catalogue"
 
-systemctl start catalogue
+systemctl start catalogue &>>$logfile
 validate $? "start catalogue"
 
 cp $script_dir/mongo.repo /etc/yum.repos.d/mongo.repo
