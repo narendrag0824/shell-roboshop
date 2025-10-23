@@ -11,7 +11,7 @@ logfolder="/var/log/shell-roboshop"
 scriptname=$( echo $0 | cut -d "." -f1 )
 logfile="$logfolder/$scriptname.log"
 mongodbhost="$mangodb.narendra.fun"
-scriptdir=$pwd
+script_dir="$pwd"
 
 mkdir -p $logfolder
 echo "script started excuted: $(date)"
@@ -40,7 +40,7 @@ dnf install nodejs -y &>>$logfile
 validate $? "install node js"
 
 id roboshop &>>$logfile
-if [ $? -ne 0]; then
+if [ $? -ne 0 ]; then
     useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$logfile
     validate $? "createing system user"
 else
@@ -65,7 +65,7 @@ validate $? "unzip the code"
 npm install &>>$logfile
 validate $? "install dependencies"
 
-cp $scriptdir/catalogue.service /etc/systemd/system/catalogue.service 
+cp $script_dir/catalogue.service /etc/systemd/system/catalogue.service 
 validate $? "copy systm service to catalogue user"
 
 systemctl daemon-reload
@@ -77,7 +77,7 @@ validate $? "enable catalogue"
 systemctl start catalogue
 validate $? "start catalogue"
 
-cp $scriptdir/mongo.repo /etc/yum.repos.d/mongo.repo
+cp $script_dir/mongo.repo /etc/yum.repos.d/mongo.repo
 validate $? "copy mongo.repo"
 
 dnf install mongodb-mongosh -y &>>$logfile
