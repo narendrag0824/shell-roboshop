@@ -10,7 +10,7 @@ n="\e[0m"
 logfolder="/var/log/shell-roboshop"
 scriptname=$( echo $0 | cut -d "." -f1 )
 logfile="$logfolder/$scriptname.log"
-mongodbhost="$mongodb.narendra.fun"
+mongodbhost="mongodb.narendra.fun"
 script_dir="$(pwd)"
 
 mkdir -p $logfolder
