@@ -1,5 +1,5 @@
 #!/bin/bash
 
-mongodbhost=$(mongodb.narendra.fun)
+mongodb_host=$(mongodb.narendra.fun)
 
-echo id "hi:$mongodbhost"
+echo id "hi:$mongodb_host"
