@@ -11,7 +11,7 @@ logfolder="/var/log/shell-roboshop"
 scriptname=$( echo $0 | cut -d "." -f1 )
 logfile="$logfolder/$scriptname.log"
 mongodbhost="$mangodb.narendra.fun"
-script_dir="$pwd"
+script_dir="$(pwd)"
 
 mkdir -p $logfolder
 echo "script started excuted: $(date)"
