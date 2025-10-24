@@ -44,8 +44,11 @@ validate $? "enable"
 systemctl start rabbitmq-server &>>$logfile
 validate $? "start "
 
-
-rabbitmqctl add_user roboshop roboshop123 &>>$logfile
+if [ $? -ne 0 ]; then
+    rabbitmqctl add_user roboshop roboshop123 &>>$logfile
+else
+    echo -e "user already added...$y skipping $n"     
+fi    
 validate $? "user adding"
 
 
