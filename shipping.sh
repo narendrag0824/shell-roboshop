@@ -51,6 +51,9 @@ validate $? "copy the code"
 cd /app 
 validate $? "open current dir"
 
+rm -rf /app/*
+validate $? "remove previous data"
+
 unzip /tmp/shipping.zip &>>$logfile
 validate $? "unzip the code"
 
