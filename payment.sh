@@ -31,34 +31,44 @@ validate(){
   fi      
 }
 
-dnf install python3 gcc python3-devel -y
 
 
-useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop
+dnf install python3 gcc python3-devel -y &>>$logfile
+validate $? "installing python"
 
+if [ $? -ne 0 ]; then
+     useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$logfile
+     validate $? "installing python"
+else
+   echo -e "already added...$y skipiing $n" 
+fi       
 
-mkdir /app 
+mkdir /app &>>$logfile
+validate $? "create dir"
 
-
-curl -L -o /tmp/payment.zip https://roboshop-artifacts.s3.amazonaws.com/payment-v3.zip 
-
+curl -L -o /tmp/payment.zip https://roboshop-artifacts.s3.amazonaws.com/payment-v3.zip &>>$logfile
+validate $? "copy code here"
 
 cd /app 
+validate $? "current dir"
 
+rm -rf /app/*
+validate $? "remove previous data"
 
-unzip /tmp/payment.zip
+unzip /tmp/payment.zip &>>$logfile
+validate $? "unzip code is here"
 
+pip3 install -r requirements.txt &>>$logfile
+validate $? "dependencyes installing"
 
-pip3 install -r requirements.txt
+cp $script_dir/payment.service /etc/systemd/system/payment.service &>>$logfile
+validate $? "copy payment.service here"
 
+systemctl daemon-reload &>>$logfile
+validate $? "reloading "
 
-/etc/systemd/system/payment.service
+systemctl enable payment &>>$logfile
+validate $? "enabling payment"
 
-
-systemctl daemon-reload
-
-
-systemctl enable payment 
-
-
-systemctl start payment
+systemctl start payment &>>$logfile
+validate $? "starting payment"

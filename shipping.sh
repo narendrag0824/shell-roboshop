@@ -78,9 +78,9 @@ validate $? "install mysql"
 
 mysql -h $mysqlhost -uroot -pRoboShop@1 -e 'use cities' &>>$logfile
 if [ $? -ne 0 ]; then
-      mysql -h $mysqlhost -uroot -pRoboShop@1 < /app/db/schema.sql
-      mysql -h $mysqlhost -uroot -pRoboShop@1 < /app/db/app-user.sql 
-      mysql -h $mysqlhost -uroot -pRoboShop@1 < /app/db/master-data.sql
+      mysql -h $mysqlhost -uroot -pRoboShop@1 < /app/db/schema.sql &>>$logfile
+      mysql -h $mysqlhost -uroot -pRoboShop@1 < /app/db/app-user.sql &>>$logfile
+      mysql -h $mysqlhost -uroot -pRoboShop@1 < /app/db/master-data.sql &>>$logfile
 else
    echo -e "shipping data already loaded...$y skipping $n"   
 fi      
