@@ -42,11 +42,11 @@ validate $? "install nodejs"
 if [ $? -ne 0 ]; then
        useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop
 else
-        echo "user already added...$y SKIPPING $n"
+        echo -e "user already added...$y SKIPPING $n"
 fi           
  validate $? "adding user"
 
-mkdir -p/app 
+mkdir -p /app 
 validate $? "create directory"
 
 curl -L -o /tmp/cart.zip https://roboshop-artifacts.s3.amazonaws.com/cart-v3.zip &>>$logfile
