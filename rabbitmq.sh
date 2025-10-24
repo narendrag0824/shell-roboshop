@@ -33,22 +33,22 @@ validate(){
 cp $script_dir/rabbitmq.repo /etc/yum.repos.d/rabbitmq.repo
 validate $? "copy script from anthor folder"
 
-dnf install rabbitmq-server -y
+dnf install rabbitmq-server -y $logfolder
 validate $? "installing rabbitmq"
 
 
-systemctl enable rabbitmq-server
+systemctl enable rabbitmq-server $logfolder
 validate $? "enable"
 
 
-systemctl start rabbitmq-server
+systemctl start rabbitmq-server $logfolder
 validate $? "start "
 
 
-rabbitmqctl add_user roboshop roboshop123
+rabbitmqctl add_user roboshop roboshop123 $logfolder
 validate $? "user adding"
 
 
-rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*"
+rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*" $logfolder
 validate $? "settingup permissions"
 
