@@ -1,0 +1,54 @@
+#!/bin/bash
+
+userid=$(id -u)
+
+r="\e[31m"
+g="\e[32m"
+y="\e[33m"
+n="\e[0m"
+
+logfolder="/var/log/shell-roboshop"
+scriptname=$( echo $0 | cut -d "." -f1 )
+logfile="$logfolder/$scriptname.log"
+mongodbhost="mongodb.narendra.fun"
+script_dir="$(pwd)"
+
+mkdir -p $logfolder
+echo "script started excuted: $(date)"
+
+if [ $userid -ne 0 ]; then
+    echo -e "error::please run as sudo user"
+    exit 1
+fi
+
+validate(){
+  if [ $1 -ne 0 ]; then
+      echo -e "$2 ... $r is failed $n"
+      exit 1
+  else
+      echo -e "$2 ... $g is success $n"
+  fi      
+}
+
+cp $script_dir/rabbitmq.repo /etc/yum.repos.d/rabbitmq.repo
+validate $? "copy script from anthor folder"
+
+dnf install rabbitmq-server -y
+validate $? "installing rabbitmq"
+
+
+systemctl enable rabbitmq-server
+validate $? "enable"
+
+
+systemctl start rabbitmq-server
+validate $? "start "
+
+
+rabbitmqctl add_user roboshop roboshop123
+validate $? "user adding"
+
+
+rabbitmqctl set_permissions -p / roboshop ".*" ".*" ".*"
+validate $? "settingup permissions"
+
