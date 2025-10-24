@@ -44,7 +44,8 @@ if [ $? -ne 0 ]; then
      useradd --system --home /app --shell /sbin/nologin --comment "roboshop system user" roboshop &>>$logfile
      validate $? "useradd"
 else
-     echo -e"user already added...$y skiping $n"     
+     echo -e "user already added...$y skiping $n"  
+fi        
 
 mkdir -p /app 
 validate $? "create dir"
