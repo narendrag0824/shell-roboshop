@@ -59,6 +59,7 @@ validate $? "change dir"
 unzip /tmp/frontend.zip &>>$logfile
 validate $? "unzip code here"
 
+rm -rf /etc/nginx/nginx.conf
 cp $script_dir/nginx.conf /etc/nginx/nginx.conf &>>$logfile
 validate $? "copy nginx.conf is here"
 
