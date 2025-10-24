@@ -69,7 +69,7 @@ validate $? "enable shipping"
 
 systemctl start shipping &>>$logfile
 validate $? "start shipping"
-if
+
 dnf install mysql -y &>>$logfile
 validate $? "install mysql"
 
